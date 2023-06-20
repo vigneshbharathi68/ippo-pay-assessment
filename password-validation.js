@@ -1,5 +1,6 @@
 function minimumStepsToMakeStrongPassword(password) {
     let steps = 0;
+    console.log()
   
     // Check password length
     if (password.length < 6) {

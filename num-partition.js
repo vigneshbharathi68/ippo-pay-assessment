@@ -1,60 +1,36 @@
-function minimizeArraySumDifference(nums) {
-//   nums.sort((a, b) => a - b);
+const arr = [3, 9, 7, 3];
 
-//   const n = nums.length;
-//   const midIndex = Math.floor(n / 2);
-
-//   // Split the array into two parts
-//   console.log(midIndex)
-//   const array1 = nums.slice(0, midIndex);
-//   const array2 = nums.slice(midIndex);
-
-//   // Reverse the second array to minimize the sum of differences
-//   array2.reverse();
-//   console.log(array1, array2)
-//   const sum1 = array1.reduce((acc, curr) => acc + curr, 0);
-//   const sum2 = array2.reduce((acc, curr) => acc + curr, 0);
-
-
-return Math.abs(sum1 - sum2);
-}
-
-// const nums = [2,-1,0,4,-2,-9];
-// const minimumDifference = minimizeArraySumDifference(nums);
-// console.log(minimumDifference);
-function separateArrayWithLeastSumDifference(nums) {
-    const n = nums.length;
-    let minDiff = Infinity;
-    let result = [];
-  
-    // Calculate the sum of all elements in the array
-    const totalSum = nums.reduce((acc, curr) => acc + curr, 0);
-  
-    function helper(currIndex, array1, sum1, array2, sum2) {
-      if (currIndex === n) {
-        const diff = Math.abs(sum1 - sum2);
-  
-        if (diff < minDiff) {
-          minDiff = diff;
-          result = [array1.slice(), array2.slice()];
-        }
-  
-        return;
-      }
-  
-      // Add the current element to array1
-      helper(currIndex + 1, array1.concat(nums[currIndex]), sum1 + nums[currIndex], array2, sum2);
-  
-      // Add the current element to array2
-      helper(currIndex + 1, array1, sum1, array2.concat(nums[currIndex]), sum2 + nums[currIndex]);
-    }
-  
-    helper(0, [], 0, [], 0);
-    return result;
+function separateArrleastDiff(arr) {
+  arr.sort((a, b) => a - b);
+  let meanVal = arr.reduce((a, b) => a + b) / arr.length;
+  let arrCopy = [...arr];
+  let splitArr1 = [];
+  for (let i = 1; i <= arr.length / 2; i++) {
+    let meanForSpecificEl = meanVal * i;
+    let sumOfArr = splitArr1.length > 0 ? splitArr1.reduce((a, b) => a + b) : 0;
+    let lookUpVal = meanForSpecificEl - sumOfArr;
+    let nearestMeanEl = arrCopy.reduce((a, b) => {
+      return Math.abs(b - lookUpVal) < Math.abs(a - lookUpVal) ? b : a;
+    });
+    arrCopy.splice(arrCopy.indexOf(nearestMeanEl), 1);
+    splitArr1.push(nearestMeanEl);
   }
-  
-  // Example usage:
-  const nums = [ -9, -2, -1, 0, 2, 4 ];
-  const separatedArrays = separateArrayWithLeastSumDifference(nums);
-  console.log(separatedArrays[0]); // Output: [ 2, 4, -9 ]
-  console.log(separatedArrays[1]); // Output: [ -1, 0, -2 ]
+  let arr1Sum = splitArr1.reduce((a,b) => a + b)
+  let arr2Sum = arrCopy.reduce((a,b) => a +b);
+  if (arr1Sum > arr2Sum) {
+      return  arr1Sum - arr2Sum
+  } else {
+    return arr2Sum - arr1Sum
+  }
+}
+console.log("Test Case 1 ---------")
+console.log("input:", [3,9,7,3])
+console.log("The absolute difference between the sums of the arrays is ", separateArrleastDiff([3,9,7,3]))
+
+console.log("Test Case 2 ---------")
+console.log("input:", [-36,36])
+console.log("The absolute difference between the sums of the arrays is ", separateArrleastDiff([-36,36]))
+
+console.log("Test Case 3 ---------")
+console.log("input:", [2,-1,0,4,-2,-9])
+console.log("The absolute difference between the sums of the arrays is ", separateArrleastDiff([2,-1,0,4,-2,-9]))
